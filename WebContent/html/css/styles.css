@@ -1,0 +1,17 @@
+h1, h2{
+	color: #f0ad4e;
+	text-align: center;
+}
+
+a:hover{
+    text-decoration: none;
+    }
+    
+html {
+	font-family: Verdana;
+	font-size: 15px;
+}
+
+a{
+	color:black;
+}
