@@ -8,7 +8,7 @@ public class SQLite {
 	public static void main(String args[]) {
 	      try {
 	         Class.forName("org.sqlite.JDBC");
-	         Connection c = DriverManager.getConnection("jdbc:sqlite:C:\\\\Users\\\\xioma\\\\eclipse-workspace\\\\Servlet\\\\test.db");
+	         Connection c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\xioma\\eclipse-nuevo\\BuyArk\\test.db");
 	         System.out.println("Base de datos abierta correctamente");
 
 	         Statement consulta = c.createStatement();

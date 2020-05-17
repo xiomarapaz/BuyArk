@@ -107,7 +107,7 @@ public class Registro extends HttpServlet {
     public static void InsertarDatos(String usuari, String pass, String email) {
     	try {
     		Class.forName("org.sqlite.JDBC");
-			Connection c = DriverManager.getConnection("jdbc:sqlite:test.db");
+    		 Connection c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\xioma\\eclipse-nuevo\\BuyArk\\test.db");
 			
 	        System.out.println("Base de datos conectada!!!!!!!!!!!!");
 	         
@@ -141,7 +141,7 @@ public class Registro extends HttpServlet {
     public static int ComprobarDatos() {
     	try {			
 			Class.forName("org.sqlite.JDBC");
-			Connection c = DriverManager.getConnection("jdbc:sqlite:test.db");
+			 Connection c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\xioma\\eclipse-nuevo\\BuyArk\\test.db");
 	        System.out.println("Base de datos conectada");
 	         
 	        Statement query = c.createStatement(); 
