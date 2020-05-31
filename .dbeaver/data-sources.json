@@ -1,0 +1,30 @@
+{
+	"folders": {},
+	"connections": {
+		"sqlite_jdbc-17267c74bb3-55e130dd25688e71": {
+			"provider": "generic",
+			"driver": "sqlite_jdbc",
+			"name": "SQLite - test.db",
+			"save-password": true,
+			"show-system-objects": true,
+			"read-only": false,
+			"configuration": {
+				"database": "C:\\Users\\xioma\\eclipse-nuevo\\BuyArk\\test.db",
+				"url": "jdbc:sqlite:C:\\Users\\xioma\\eclipse-nuevo\\BuyArk\\test.db",
+				"type": "dev",
+				"auth-model": "native",
+				"handlers": {}
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false
+		}
+	}
+}
