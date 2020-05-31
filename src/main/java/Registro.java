@@ -2,13 +2,18 @@ package main.java;
 
 import java.io.IOException;
 
+
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import java.util.logging.Logger;
+import java.util.logging.Level;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,18 +27,70 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/registro")
 public class Registro extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger LOGGER = Logger.getLogger("main.java.Registro");
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public Registro() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-    // ACABAR DE COMPARAR LOS DATOS DE REGISTRO
+    public void createTableUser() throws SQLException, NullPointerException {
+    	Connection con = null;
+        Statement stmt = null;
+        try {
+        	SQLite db = new SQLite();
+        	con = db.conectar();
+        	stmt = con.createStatement();
+            String sql = "CREATE TABLE IF NOT EXISTS USER (" +
+            			 "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                         "NICK  VARCHAR(20) NOT NULL," +
+                         "PASS VARCHAR(20), " + 
+                         "EMAIL VARCHAR(20)" + 
+                         ")";
+            
+            stmt.executeUpdate(sql);
+        } catch (Exception e){
+            LOGGER.log(Level.SEVERE, e.getMessage());
+        } 
+        LOGGER.log(Level.INFO, "Table created successfully");
+    }
+    
+    public void insertaUser(String nickname, String password, String email) throws SQLException, NullPointerException {
+    	Connection con = null;
+    	Statement stmt = null;
+    	
+    	try {
+    		SQLite db = new SQLite();
+    		con = db.conectar();
+    		con.setAutoCommit(false);
+    		stmt = con.createStatement();
+    		
+    		String sql = "INSERT INTO USER (NICK, PASS, EMAIL) " +
+                    "VALUES ('" + nickname+ "', '" + password+ "', '" + email+ "');"; 
+    		
+    		stmt.executeUpdate(sql);
+    		con.commit();
+    		
+    	} catch (Exception e) {
+    		LOGGER.log(Level.SEVERE, e.getMessage());
+    	} finally {
+    		stmt.close();
+    		con.close();
+    	}
+    	LOGGER.log(Level.INFO, "User inserted successfully");
+    }
+    
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
+    	
+    	try {
+			this.createTableUser();
+		} catch (SQLException e) {
+			LOGGER.log(Level.SEVERE, e.getMessage());
+		}
+    	
         // Patrón para validar el email
         Pattern mail = Pattern
                 .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
@@ -45,11 +102,11 @@ public class Registro extends HttpServlet {
         
         //Patron para validar usuario
         Pattern user = Pattern
-        		.compile("^[A-Za-z0-9]{10}$");
+        		.compile("^[A-Za-z0-9]{3,}$");
         
       //Recoger parametros
     	String usuari = req.getParameter("user");
-		String pass = req.getParameter("password");
+		String pass = req.getParameter("pass");
         String email = req.getParameter("email");
         
         //comprobaciones con las expresiones
@@ -59,112 +116,22 @@ public class Registro extends HttpServlet {
         
   
         if (matmail.find() == true && matpwd.find() == true && matuser.find() == true) {
-           	//ComprobarDatos();
-        	InsertarDatos(usuari, pass, email);
-            response(resp, "Felicidades "+usuari+" Registro realizado!");
-            response(resp, "Tus datos son: "+pass+" "+email);
-           
-//            try {
-//    			Class.forName("org.sqlite.JDBC");
-//    			String dbURL = "jdbc:sqlite:C:\\Users\\xioma\\eclipse-workspace\\Servlet\\test.db";
-//    			
-//    			Connection c = DriverManager.getConnection(dbURL+"sqlite:test.db");
-//    	        System.out.println("Base de datos conectada");
-//
-//    	        System.out.println("Felicidades "+usuari+" Registro realizado!");
-//    	        System.out.println("Tus datos son: "+pass+" "+email);
-//    	        
-//    	        Statement query = c.createStatement(); 
-//    	        /*
-//    	        String sql = ("insert into USER(NICK, PASS, EMAIL) values('"+usuari+"','"+pass+"','"+email+"')"
-//    	        			);
-//    	        query.executeUpdate(sql);
-//    	        */
-//    	        String sql =("INSERT INTO USER (nick, pass, email ) VALUES('"+usuari+"','"+pass+"','"+email+"')");
-//
-////    	        int i=query.executeUpdate ("insert into USER(NICK, PASS, EMAIL) values('"+usuari+"','"+pass+"','"+email+"');");
-//    	        int i=query.executeUpdate (sql);
-//    	        query.close();
-//    	        
-//    	        c.close();
-//    	        System.out.println("Insert hecho");
-//    			} catch ( Exception e ) {
-//    	         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-//    	         System.exit(0);
-//    			}
+        	try {
+        		insertaUser(usuari, pass, email);
+        	} catch (Exception e) {
+        		LOGGER.log(Level.SEVERE, e.getMessage());
+        	} 
+        	LOGGER.log(Level.INFO, "Usuario creado correctamente");
+        		resp.sendRedirect("html/registro_ok.jsp");
         	}else {
-        	response(resp, "Registro incorrecto.");
+				resp.sendRedirect("html/registro_NOTok.jsp");
         }
-        /*
-        int r = ComprobarDatos();
-		if (r==1) {
-			System.out.println("Usuario ya creado");	
-		}*/
-        
-    }//Final de void 
-    
-    //AÑADIR DATOS A LA BBDD
-    public static void InsertarDatos(String usuari, String pass, String email) {
-    	try {
-    		Class.forName("org.sqlite.JDBC");
-    		 Connection c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\xioma\\eclipse-nuevo\\BuyArk\\test.db");
-			
-	        System.out.println("Base de datos conectada!!!!!!!!!!!!");
-	         
-	        Statement query = c.createStatement(); 
-	        
-	        String sql =("INSERT INTO USER (NICK, PASS, EMAIL ) VALUES('"+usuari+"','"+pass+"','"+email+"')");
-	        			
-	        query.executeUpdate(sql);
-	        
-	        query.close();
-	        c.close();
-	        System.out.println("Insert hecho");
-			} catch ( Exception e ) {
-	         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-	         System.exit(0);
-			}
     }
-    
-    
-	private void response(HttpServletResponse resp, String msg)
-			throws IOException {
-		PrintWriter out = resp.getWriter();
-		out.println("<html>");
-		out.println("<body>");
-		out.println("<t1>" + msg + "</t1>");
-		out.println("</body>");
-		out.println("</html>");
-	}
-
-	//Comprobar datos en la bbdd
-    public static int ComprobarDatos() {
-    	try {			
-			Class.forName("org.sqlite.JDBC");
-			 Connection c = DriverManager.getConnection("jdbc:sqlite:C:\\Users\\xioma\\eclipse-nuevo\\BuyArk\\test.db");
-	        System.out.println("Base de datos conectada");
-	         
-	        Statement query = c.createStatement(); 
-	        String sql = ("SELECT * FROM USER");
-	        int r = query.executeUpdate(sql);
-	        query.close();
-	        c.close();
-	        //si encuentra el mismo usuario dentro de la bbdd devolvera 1
-	        return r;
-	        
-    		} catch ( Exception e ) {
-	         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
-	         System.exit(0);
-			}
-		return 0;
-    }
-
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 }
