@@ -2,11 +2,10 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
-</head>
+<jsp:include page="head.jsp" />
+<jsp:include page="header.jsp" />  
 <body>
-
+	<h3>Algo ha fallado. Registro incorrecto.</h3>
+	<jsp:include page="footer.jsp" /> 
 </body>
 </html>
