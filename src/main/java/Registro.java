@@ -2,10 +2,7 @@ package main.java;
 
 import java.io.IOException;
 
-
-import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -23,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Servlet implementation class Registro
+ * @author xioma
  */
 @WebServlet("/registro")
 public class Registro extends HttpServlet {
@@ -35,14 +33,21 @@ public class Registro extends HttpServlet {
     public Registro() {
         super();
     }
+    
+    /**
+     * method that create the table user if not exists
+     * 
+     * @throws SQLException
+     * @throws NullPointerException
+     */
 
-    public void createTableUser() throws SQLException, NullPointerException {
-    	Connection con = null;
+    public void crearUSER() throws SQLException, NullPointerException {
+    	Connection c = null;
         Statement stmt = null;
         try {
         	SQLite db = new SQLite();
-        	con = db.conectar();
-        	stmt = con.createStatement();
+        	c = db.conectar();
+        	stmt = c.createStatement();
             String sql = "CREATE TABLE IF NOT EXISTS USER (" +
             			 "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                          "NICK  VARCHAR(20) NOT NULL," +
@@ -54,39 +59,51 @@ public class Registro extends HttpServlet {
         } catch (Exception e){
             LOGGER.log(Level.SEVERE, e.getMessage());
         } 
-        LOGGER.log(Level.INFO, "Table created successfully");
+        LOGGER.log(Level.INFO, "Table USER created successfully");
     }
+    /**
+     * method that insert the user in the database
+     * @param n, nick
+     * @param p, pass
+     * @param m, mail
+     * @throws SQLException
+     * @throws NullPointerException
+     */
     
-    public void insertaUser(String nickname, String password, String email) throws SQLException, NullPointerException {
-    	Connection con = null;
+    public void insertarUsuario(String n, String p, String m) throws SQLException, NullPointerException {
+    	Connection c = null;
     	Statement stmt = null;
     	
     	try {
     		SQLite db = new SQLite();
-    		con = db.conectar();
-    		con.setAutoCommit(false);
-    		stmt = con.createStatement();
+    		c = db.conectar();
+    		c.setAutoCommit(false);
+    		stmt = c.createStatement();
     		
     		String sql = "INSERT INTO USER (NICK, PASS, EMAIL) " +
-                    "VALUES ('" + nickname+ "', '" + password+ "', '" + email+ "');"; 
+                    "VALUES ('" + n+ "', '" + p+ "', '" + m+ "');"; 
     		
     		stmt.executeUpdate(sql);
-    		con.commit();
+    		c.commit();
     		
     	} catch (Exception e) {
     		LOGGER.log(Level.SEVERE, e.getMessage());
-    	} finally {
-    		stmt.close();
-    		con.close();
     	}
-    	LOGGER.log(Level.INFO, "User inserted successfully");
+    	LOGGER.log(Level.INFO, "Row inserted successfully");
     }
     
+    
+    /**
+     * @throws Servlet
+     * @param usuari, pass, email
+     * 
+     * method that check from pattern the string, knows it is correct and call another method to do a insert in the database  
+     */
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
     	
     	try {
-			this.createTableUser();
+			this.crearUSER();
 		} catch (SQLException e) {
 			LOGGER.log(Level.SEVERE, e.getMessage());
 		}
@@ -98,7 +115,7 @@ public class Registro extends HttpServlet {
 		
         //Patron para validar contraseña
         Pattern pwd = Pattern
-        		.compile("^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{8,16}$");
+        		.compile("^(?=\\w*\\d)(?=\\w*[A-Z])(?=\\w*[a-z])\\S{8,}$");
         
         //Patron para validar usuario
         Pattern user = Pattern
@@ -117,11 +134,10 @@ public class Registro extends HttpServlet {
   
         if (matmail.find() == true && matpwd.find() == true && matuser.find() == true) {
         	try {
-        		insertaUser(usuari, pass, email);
+        		insertarUsuario(usuari, pass, email);
         	} catch (Exception e) {
         		LOGGER.log(Level.SEVERE, e.getMessage());
         	} 
-        	LOGGER.log(Level.INFO, "Usuario creado correctamente");
         		resp.sendRedirect("html/registro_ok.jsp");
         	}else {
 				resp.sendRedirect("html/registro_NOTok.jsp");
