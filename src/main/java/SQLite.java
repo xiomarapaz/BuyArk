@@ -16,10 +16,6 @@ import java.util.logging.Logger;
 public class SQLite {
 	private static final Logger LOGGER = Logger.getLogger("main.java.SQLite");
 	
-	public static void main( String args[] ) throws SQLException {
-		SQLite db = new SQLite();
-    	db.createTableUser();
-	   }
 	
 	public Connection conectar() throws FileNotFoundException, IOException {
 		Connection c = null;
@@ -40,28 +36,56 @@ public class SQLite {
 		
 	}
 	
-	public void createTableUser() throws SQLException, NullPointerException {
-    	Connection con = null;
-        Statement stmt = null;
-        try {
-        	SQLite db = new SQLite();
-        	con = db.conectar();
-        	stmt = con.createStatement();
-            String sql = "CREATE TABLE IF NOT EXISTS USER (" +
-            			 "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                         "NICK  VARCHAR(20) NOT NULL," +
-                         "PASS VARCHAR(20), " + 
-                         "EMAIL VARCHAR(20)" + 
-                         ")";
-            
-            stmt.executeUpdate(sql);
-        } catch (Exception e){
+
+	public void crearCompra() throws SQLException {
+		Connection c = null;
+		Statement stmt = null;
+    
+		try {
+			SQLite db = new SQLite();
+    		c = db.conectar();
+			stmt = c.createStatement();
+			
+			String sql = "CREATE TABLE IF NOT EXISTS COMPRA (" +
+       			 	"ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+       			    "NICK  VARCHAR(20) NOT NULL, " +
+	                "PRODUCTOS VARCHAR(500), " + 
+	                "PAGO VARCHAR(25), " + 
+	                "FOREIGN KEY (NICK) REFERENCES USER (NICK)" +
+	                ")";
+       
+       
+       stmt.executeUpdate(sql);
+		} catch (Exception e){
             LOGGER.log(Level.SEVERE, e.getMessage());
-        } finally {
-        	stmt.close();
-            con.close();
         }
-        LOGGER.log(Level.INFO, "Table created successfully");
+        LOGGER.log(Level.INFO, "Table COMPRAS created successfully");
     }
+
+	
+	public void crearComentario() throws SQLException {
+		Connection c = null;
+		Statement stmt = null;
+    
+		try {
+			SQLite db = new SQLite();
+    		c = db.conectar();
+			stmt = c.createStatement();
+			
+			String sql = "CREATE TABLE IF NOT EXISTS COMENTARIOS (" +
+       			 	"ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+       			    "NICK  VARCHAR(10) NOT NULL, " +
+	                "COMMENTS VARCHAR(500), " + 
+	                "FOREIGN KEY (NICK) REFERENCES USER (NICK)" +
+	                ")";
+       
+       stmt.executeUpdate(sql);
+		} catch (Exception e){
+            LOGGER.log(Level.SEVERE, e.getMessage());
+        }
+        LOGGER.log(Level.INFO, "Table COMENTARIOS created successfully");
+    }
+
+	
 	
 }
