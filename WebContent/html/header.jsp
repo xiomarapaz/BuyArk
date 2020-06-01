@@ -26,6 +26,7 @@
 								<li><a href="index.jsp#cursos">Cursos</a></li>
 								<li><a href="index.jsp#opiniones">Opiniones</a></li>
 								<li><a href="login.jsp">Entrar</a></li>
+								<li><a href="salir.jsp">Salir</a></li>
 							</ul>
 						</div><!-- /.navbar-collapse -->
 					</div><!-- /.container-fluid -->

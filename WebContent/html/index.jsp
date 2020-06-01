@@ -2,28 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
-	<head>
-	<meta charset="utf-8">
-		<title>BuyArk</title>
-		<!-- Description, Keywords and Author -->
-		<meta name="description" content="Your description">
-		<meta name="keywords" content="Your,Keywords">
-		<meta name="author" content="ResponsiveWebInc">
-		
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		
-		<!-- Styles -->
-		<!-- Bootstrap CSS -->
-		<link href="css/bootstrap.min.css" rel="stylesheet">
-		<!-- Font awesome CSS -->
-		<link href="css/font-awesome.min.css" rel="stylesheet">		
-		<!-- Custom CSS -->
-		<link href="css/style.css" rel="stylesheet">
-		
-		<!-- Favicon -->
-		<link rel="shortcut icon" href="#">
-	</head>
-	
+<jsp:include page="head.jsp" />
 	<body>
 	
 		<div class="wrapper">
@@ -47,8 +26,8 @@
 						<!-- Collect the nav links, forms, and other content for toggling -->
 						<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 							<ul class="nav navbar-nav navbar-right">
-								<li><a href="index.html">Home</a></li>
-								<li><a href="#cursos">Cursos</a></li>
+								<li><a href="index.jsp">Home</a></li>
+								<li><a href="cursos.jsp">Cursos</a></li>
 								<li><a href="#opiniones">Opiniones</a></li>
 								<li><a href="login.jsp">Entrar</a></li>
 							</ul>
@@ -61,7 +40,7 @@
 			<div class="banner">
 				<div class="container">
 					<!-- heading -->
-					<h2>Bienvenid@ a BuyArk</h2>
+					<h2>Bienvenid@ ${sessionScope.user} a BuyArk</h2>
 					<!-- sub heading -->
 					<h3>¡Mira algún curso que te interese!</h3>
 					<!-- access button -->
@@ -88,10 +67,6 @@
 								<img class="img-responsive" src="img/cursos/react.svg" alt="" />
 								<!-- heading -->
 								<h3>Curso de React</h3>
-								<!-- checkbox -->
-								<label class="checkbox-inline"> 
-									<input type="checkbox" name="check"> React
-								</label> 
 							</div>
 						</div>
 						<div class="col-md-4">
@@ -101,10 +76,6 @@
 								<img class="img-responsive" src="img/cursos/git.png" alt="" />
 								<!-- heading -->
 								<h3>Curso de GIT</h3>
-								<!-- checkbox -->
-								<label class="checkbox-inline"> 
-									<input type="checkbox" name="check"> Git
-								</label> 
 							</div>
 						</div>
 						<div class="col-md-4">
@@ -114,10 +85,6 @@
 								<img class="img-responsive" src="img/cursos/python.jpg" alt="" />
 								<!-- heading -->
 								<h3>Curso de Python</h3>
-								<!-- checkbox -->
-								<label class="checkbox-inline"> 
-									<input type="checkbox" name="check"> Python
-								</label> 
 							</div>
 						</div>
 						<div class="col-md-4">
@@ -127,10 +94,6 @@
 								<img class="img-responsive" src="img/cursos/kotlin.svg" alt="" />
 								<!-- heading -->
 								<h3>Curso de Kotlin</h3>
-								<!-- checkbox -->
-								<label class="checkbox-inline"> 
-									<input type="checkbox" name="check"> Kotlin
-								</label> 
 							</div>
 						</div>
 						<div class="col-md-4">
@@ -140,10 +103,6 @@
 								<img class="img-responsive" src="img/cursos/mongo.png" alt="" />
 								<!-- heading -->
 								<h3>Curso de MongoDB</h3>
-								<!-- checkbox -->
-								<label class="checkbox-inline"> 
-									<input type="checkbox" name="check"> MongoDB
-								</label> 
 							</div>
 						</div>
 						<div class="col-md-4">
@@ -153,10 +112,6 @@
 								<img class="img-responsive" src="img/cursos/java.svg" alt="" />
 								<!-- heading -->
 								<h3>Curso de Java</h3>
-								<!-- checkbox -->
-								<label class="checkbox-inline"> 
-									<input type="checkbox" name="check"> Java
-								</label> 
 							</div>
 						</div>
 					</div>
@@ -169,9 +124,8 @@
 					<!-- default heading -->
 					<div class="default-heading">
 						<!-- heading -->
-						<h2>Opiniones de usuarios</h2>
+						<h2>Tu opinion es importante</h2>
 						<!-- paragraph -->
-						<p>Aqui encontrarás información de confianza.</p>
 					</div>
 					<!-- contact container -->
 					<div class="contact-container">	
@@ -179,18 +133,15 @@
 							<div class="col-md-8 col-sm-6">
 								<!-- heading -->
 								<h3>Expresate</h3>
-								<form role="form" id="contactForm" method="post">
+								
+								<form action="../Cursos" method="get" name="comment">
 									<div class="form-group">
-										<label for="contactName">Nombre</label>
-										<input class="form-control" type="text" id="contactName" name="contactName"placeholder="Enter Name" />
-									</div>
-									<div class="form-group">
-										<label for="contactEmail">Email</label>
-										<input class="form-control" type="email" id="contactEmail" name="contactEmail" placeholder="Enter Email" />
+										<label for="contactName">Usuario</label>
+										<input class="form-control" type="text" name="nickname" placeholder="Indica tu usuario" value=${sessionScope.user} >
 									</div>
 									<div class="form-group">
 										<label for="contactMessage">Mensaje</label>
-										<textarea class="form-control" id="contactMessage" name="contactMessage" rows="3" placeholder="Enter Message"></textarea>
+										<textarea class="form-control" name="comentario" rows="3" placeholder="Escribe tu opinión"></textarea>
 									</div>
 									<div class="form-group">
 										<button type="submit" name="submit" id="submit" class="btn btn-default">Enviar mensaje</button>
