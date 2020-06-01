@@ -73,7 +73,7 @@ public class Cursos extends HttpServlet {
 		try {
 				SQLite db = new SQLite();
 				db.crearCompra();
-				this.insertarCompra(user, cursos, pago);
+				this.insertarCompra(user, aux, pago);
 				resp.sendRedirect("html/compraOK.jsp");
 		} catch (NullPointerException | SQLException | IOException e) {
 			LOGGER.log(Level.SEVERE, e.getMessage());
@@ -100,6 +100,7 @@ public class Cursos extends HttpServlet {
 
 			String query = "INSERT INTO COMENTARIOS (NICK,COMMENTS) VALUES ('"+n+"','"+comment+"');";
 			stmt.executeUpdate(query);
+			c.commit();
 		} catch (Exception e){
             LOGGER.log(Level.SEVERE, e.getMessage());
         }	finally {
@@ -116,7 +117,7 @@ public class Cursos extends HttpServlet {
 	 * @param curses
 	 * @param pago
 	 */
-	public void insertarCompra(String n, String cursos[], String pago) throws SQLException {
+	public void insertarCompra(String n, String aux, String pago) throws SQLException {
 		Connection c = null;
     	Statement stmt = null;
     	
@@ -127,7 +128,7 @@ public class Cursos extends HttpServlet {
     		stmt = c.createStatement();
     		
     		String sql = "INSERT INTO COMPRA (NICK, PRODUCTOS, PAGO) " +
-                    "VALUES ('" + n+ "', '" + cursos+ "', '" + pago+ "');"; 
+                    "VALUES ('" + n+ "', '" + aux+ "', '" + pago+ "');"; 
     		
     		stmt.executeUpdate(sql);
     		c.commit();

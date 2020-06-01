@@ -34,31 +34,7 @@ public class Registro extends HttpServlet {
         super();
     }
     
-    /**
-     * method that create the table user if not exists
-     * 
-     */
-
-    public void crearUSER() throws SQLException, NullPointerException {
-    	Connection c = null;
-        Statement stmt = null;
-        try {
-        	SQLite db = new SQLite();
-        	c = db.conectar();
-        	stmt = c.createStatement();
-            String sql = "CREATE TABLE IF NOT EXISTS USER (" +
-            			 "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                         "NICK  VARCHAR(20) NOT NULL," +
-                         "PASS VARCHAR(20), " + 
-                         "EMAIL VARCHAR(20)" + 
-                         ")";
-            
-            stmt.executeUpdate(sql);
-        } catch (Exception e){
-            LOGGER.log(Level.SEVERE, e.getMessage());
-        } 
-        LOGGER.log(Level.INFO, "Table USER created successfully");
-    }
+  
     /**
      * method that insert the user in the database
      * @param n, nick
@@ -99,7 +75,8 @@ public class Registro extends HttpServlet {
 			throws ServletException, IOException {
     	
     	try {
-			this.crearUSER();
+    		SQLite db = new SQLite();
+			db.crearUSER();
 		} catch (SQLException e) {
 			LOGGER.log(Level.SEVERE, e.getMessage());
 		}
@@ -135,8 +112,8 @@ public class Registro extends HttpServlet {
         		LOGGER.log(Level.SEVERE, e.getMessage());
         	} 
         		resp.sendRedirect("html/registro_ok.jsp");
-        	}else {
-				resp.sendRedirect("html/registro_NOTok.jsp");
+        }else {
+			resp.sendRedirect("html/registro_NOTok.jsp");
         }
     }
 

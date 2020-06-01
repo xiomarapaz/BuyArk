@@ -15,12 +15,20 @@ import java.util.logging.Logger;
 
 public class SQLite {
 	private static final Logger LOGGER = Logger.getLogger("main.java.SQLite");
+	public static void main( String args[] ) throws SQLException {
+		SQLite db = new SQLite();
+	   }
 	
-	
+
+    /**
+	 * method that create the connection to the database
+     * @return connection
+     * @throws IOException
+     * @throws SQLException
+     */
 	public Connection conectar() throws IOException, SQLException {
 		Connection c = null;
-		String URL = "C:\\Users\\xioma\\eclipse-nuevo\\BuyArk\\src\\main\\resources\\config.properties";
-		File archivo = new File(URL);
+		File archivo = new File("C:\\Users\\xioma\\eclipse-nuevo\\BuyArk\\src\\main\\resources\\config.properties");
 		
 		try (InputStream inputStream = new FileInputStream(archivo)) {
 			Properties prop = new Properties();
@@ -32,14 +40,15 @@ public class SQLite {
 	        c = DriverManager.getConnection(uri);         
 	      } catch ( Exception e ) {
 	    	  LOGGER.log(Level.SEVERE, e.getMessage());
-	      } finally {
-	    	  c.close();
-	      }
+	      } 
 	      return c;
 		
 	}
 	
-
+	/**
+	 * method that create of purchase if not exists
+	 * @throws SQLException
+	 */
 	public void crearCompra() throws SQLException {
 		Connection c = null;
 		Statement stmt = null;
@@ -61,14 +70,14 @@ public class SQLite {
        stmt.executeUpdate(sql);
 		} catch (Exception e){
             LOGGER.log(Level.SEVERE, e.getMessage());
-        }finally {
-        	c.close();
-        	stmt.close();
         }
         LOGGER.log(Level.INFO, "Table COMPRAS created successfully");
     }
 
-	
+	/**
+	 * method that create the of comments if not exists
+	 * @throws SQLException
+	 */
 	public void crearComentario() throws SQLException {
 		Connection c = null;
 		Statement stmt = null;
@@ -88,13 +97,39 @@ public class SQLite {
        stmt.executeUpdate(sql);
 		} catch (Exception e){
             LOGGER.log(Level.SEVERE, e.getMessage());
-        }finally {
-        	stmt.close();
-        	c.close();
         }
         LOGGER.log(Level.INFO, "Table COMENTARIOS created successfully");
     }
 
+	
+	/**
+	   * method that create the table user if not exists
+	   * 
+	   */
+
+  public void crearUSER() throws SQLException, NullPointerException {
+  	Connection c = null;
+      Statement stmt = null;
+      try {
+      	SQLite db = new SQLite();
+      	c = db.conectar();
+      	stmt = c.createStatement();
+          String sql = "CREATE TABLE IF NOT EXISTS USER (" +
+          			 "ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                       "NICK  VARCHAR(20) NOT NULL," +
+                       "PASS VARCHAR(20), " + 
+                       "EMAIL VARCHAR(20)" + 
+                       ")";
+          
+       stmt.executeUpdate(sql);
+      } catch (Exception e){
+          LOGGER.log(Level.SEVERE, e.getMessage());
+      } finally {
+      	stmt.close();
+        c.close();
+    }
+      LOGGER.log(Level.INFO, "Table USER created successfully");
+  }
 	
 	
 }

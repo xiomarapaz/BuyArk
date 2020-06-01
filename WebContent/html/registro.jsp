@@ -39,7 +39,7 @@
 			<div class="col-md-8 col-sm-6">
 			<!-- heading -->
 			<h3>Nuevo usuario</h3>
-				<form action="../registro" method="post">
+				<form action="../registro" method="get">
 				<div class="form-group">
 					<label for="user">*Usuario:</label>
 					<input class="form-control" type="text" id="user" name="user" placeholder="username" />
