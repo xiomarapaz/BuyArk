@@ -20,7 +20,6 @@ public class Salir extends HttpServlet {
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 * @throws Servlet
 	 * 
 	 * we only use this method to kill the session of the user
 	 * 

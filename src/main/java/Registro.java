@@ -37,8 +37,6 @@ public class Registro extends HttpServlet {
     /**
      * method that create the table user if not exists
      * 
-     * @throws SQLException
-     * @throws NullPointerException
      */
 
     public void crearUSER() throws SQLException, NullPointerException {
@@ -66,8 +64,7 @@ public class Registro extends HttpServlet {
      * @param n, nick
      * @param p, pass
      * @param m, mail
-     * @throws SQLException
-     * @throws NullPointerException
+     * 
      */
     
     public void insertarUsuario(String n, String p, String m) throws SQLException, NullPointerException {
@@ -94,7 +91,6 @@ public class Registro extends HttpServlet {
     
     
     /**
-     * @throws Servlet
      * @param usuari, pass, email
      * 
      * method that check from pattern the string, knows it is correct and call another method to do a insert in the database  

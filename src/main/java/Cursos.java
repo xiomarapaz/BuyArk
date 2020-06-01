@@ -33,7 +33,6 @@ public class Cursos extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 * @param nickname and commment
-	 * @throws Servlet
 	 * 
 	 * method that takes the values from the section of opinions and do a insert into the database
 	 */
@@ -56,7 +55,6 @@ public class Cursos extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 * @param curses, payment, user
-	 * @throws Servlet
 	 * 
 	 * method that takes the values from the buy of the curses, and do a insert into the database
 	 */
@@ -89,7 +87,6 @@ public class Cursos extends HttpServlet {
 	 * 
 	 * @param nickname
 	 * @param comment
-	 * @throws SQLException
 	 */
 	public void insertarComentario(String n, String comment) throws SQLException {
 		Connection c = null;
@@ -118,7 +115,6 @@ public class Cursos extends HttpServlet {
 	 * @param nickname
 	 * @param curses
 	 * @param pago
-	 * @throws SQLException
 	 */
 	public void insertarCompra(String n, String cursos[], String pago) throws SQLException {
 		Connection c = null;
