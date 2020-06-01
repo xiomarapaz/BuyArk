@@ -17,9 +17,10 @@ public class SQLite {
 	private static final Logger LOGGER = Logger.getLogger("main.java.SQLite");
 	
 	
-	public Connection conectar() throws FileNotFoundException, IOException {
+	public Connection conectar() throws IOException, SQLException {
 		Connection c = null;
-		File archivo = new File("C:\\Users\\xioma\\eclipse-nuevo\\BuyArk\\src\\main\\resources\\config.properties");
+		String URL = "C:\\Users\\xioma\\eclipse-nuevo\\BuyArk\\src\\main\\resources\\config.properties";
+		File archivo = new File(URL);
 		
 		try (InputStream inputStream = new FileInputStream(archivo)) {
 			Properties prop = new Properties();
@@ -31,6 +32,8 @@ public class SQLite {
 	        c = DriverManager.getConnection(uri);         
 	      } catch ( Exception e ) {
 	    	  LOGGER.log(Level.SEVERE, e.getMessage());
+	      } finally {
+	    	  c.close();
 	      }
 	      return c;
 		
@@ -58,6 +61,9 @@ public class SQLite {
        stmt.executeUpdate(sql);
 		} catch (Exception e){
             LOGGER.log(Level.SEVERE, e.getMessage());
+        }finally {
+        	c.close();
+        	stmt.close();
         }
         LOGGER.log(Level.INFO, "Table COMPRAS created successfully");
     }
@@ -82,6 +88,9 @@ public class SQLite {
        stmt.executeUpdate(sql);
 		} catch (Exception e){
             LOGGER.log(Level.SEVERE, e.getMessage());
+        }finally {
+        	stmt.close();
+        	c.close();
         }
         LOGGER.log(Level.INFO, "Table COMENTARIOS created successfully");
     }

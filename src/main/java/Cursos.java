@@ -63,10 +63,10 @@ public class Cursos extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String[] cursos = req.getParameterValues("image[]");
 		
-		String auxCursos = "";
+		String aux = "";
 		
 		for (int i=0; i<cursos.length; i++) {
-			auxCursos += cursos[i] + ",";
+			aux += cursos[i] + ",";
 		}
 		
 		String pago = req.getParameter("payment");
@@ -80,9 +80,8 @@ public class Cursos extends HttpServlet {
 		} catch (NullPointerException | SQLException | IOException e) {
 			LOGGER.log(Level.SEVERE, e.getMessage());
 			resp.sendRedirect("html/compra_NOTokjsp");
-		}
+		} 
 	}
-	
 	
 	/**
 	 * 
@@ -106,9 +105,12 @@ public class Cursos extends HttpServlet {
 			stmt.executeUpdate(query);
 		} catch (Exception e){
             LOGGER.log(Level.SEVERE, e.getMessage());
+        }	finally {
+        	c.close();
+        	stmt.close();
         }
-        LOGGER.log(Level.INFO, "Comentario añadido correctamente");
-    }
+		LOGGER.log(Level.INFO, "Comentario añadido correctamente");
+	}
 	
 	
 	/**
@@ -118,27 +120,27 @@ public class Cursos extends HttpServlet {
 	 * @param pago
 	 * @throws SQLException
 	 */
-	public void insertarCompra(String n, String c[], String pago) throws SQLException {
-		Connection con = null;
+	public void insertarCompra(String n, String cursos[], String pago) throws SQLException {
+		Connection c = null;
     	Statement stmt = null;
     	
     	try {
     		SQLite db = new SQLite();
-    		con = db.conectar();
-    		con.setAutoCommit(false);
-    		stmt = con.createStatement();
+    		c = db.conectar();
+    		c.setAutoCommit(false);
+    		stmt = c.createStatement();
     		
     		String sql = "INSERT INTO COMPRA (NICK, PRODUCTOS, PAGO) " +
-                    "VALUES ('" + n+ "', '" + c+ "', '" + pago+ "');"; 
+                    "VALUES ('" + n+ "', '" + cursos+ "', '" + pago+ "');"; 
     		
     		stmt.executeUpdate(sql);
-    		con.commit();
+    		c.commit();
     		
     	} catch (Exception e) {
     		LOGGER.log(Level.SEVERE, e.getMessage());
     	} finally {
     		stmt.close();
-    		con.close();
+    		c.close();
     	}
     	LOGGER.log(Level.INFO, "Compra añadida correctamente");
 		
